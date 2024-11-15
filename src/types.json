@@ -1,0 +1,54 @@
+{
+  "feat": {
+    "description": "新增/添加功能相關",
+    "title": "feat"
+  },
+  "fix": {
+    "description": "錯誤/問題修復",
+    "title": "fix"
+  },
+  "refactor": {
+    "description": "重新建構現有的程式碼，未涉及新增功能或缺陷修復",
+    "title": "refactor"
+  },
+  "release": {
+    "description": "發佈版本更新",
+    "title": "release"
+  },
+  "test": {
+    "description": "測試程式碼有關的行為，如製作測試腳本，單元測試用例",
+    "title": "test"
+  },
+  "docs": {
+    "description": "文件的新增或變更",
+    "title": "docs"
+  },
+  "style": {
+    "description": "程式碼風格相關，導入或修復風格工具",
+    "title": "style"
+  },
+  "perf": {
+    "description": "效能優化，程式碼邏輯優化",
+    "title": "perf"
+  },
+  "dependencies": {
+    "description": "調整專案依賴項、升級版本、修復弱點等",
+    "title": "dependencies"
+  },
+  "build": {
+    "description": "構建或建置項目的執行檔",
+    "title": "build"
+  },
+  "ci": {
+    "description": "自動化執行腳本變更或相關測試流程",
+    "title": "ci"
+  },
+  "revert": {
+    "description": "撤回上次提交",
+    "title": "revert"
+  },
+  "chore": {
+    "description": "其他變更",
+    "title": "chore"
+  }
+}
