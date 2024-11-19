@@ -1,8 +1,7 @@
 'use strict';
 
-var wrap = require('word-wrap');
-var map = require('lodash.map');
-var longest = require('longest');
+const longest = require('./src/longest');
+var wrap = require('./src/wordwrap');
 var chalk = require('chalk');
 
 var headerLength = answers =>
@@ -32,10 +31,10 @@ var filterSubject = function(subject, disableSubjectLowerCase) {
 module.exports = function(options) {
   var types = options.types;
   var length = longest(Object.keys(types)).length + 1;
-  var choices = map(types, function(type) {
+  var choices = Object.keys(types).map(e => {
     return {
-      name: (type.title + ':').padEnd(length) + ' ' + type.description,
-      value: type.title
+      name: (types[e].title + ':').padEnd(length) + ' ' + types[e].description,
+      value: types[e].title
     };
   });
   return {
@@ -62,7 +61,7 @@ module.exports = function(options) {
         {
           type: 'list',
           name: 'type',
-          message: chalk.blue('本次提交屬於哪個更動類型?'),
+          message: chalk.blue('本次提交屬於哪種更動類型?'),
           choices: choices,
           default: options.defaultType
         },

@@ -5,7 +5,7 @@ var engine = require('./engine');
 var mock = require('mock-require');
 var semver = require('semver');
 
-var types = require('conventional-commit-types').types;
+var types = require('./src/types.json');
 
 var expect = chai.expect;
 chai.should();
@@ -37,7 +37,7 @@ var longIssues =
   'b b bb b bb b bb b bb b bb b bb b bb b bb b bb b bb b bb b bb b bb b bb b' +
   'b b bb b bb b bb b bb b bb b bb b bb b bb b bb b bb b bb b bb b bb b bb b bb b bb b bb b bb b' +
   'b b bb b bb b bb b bb b bb b bb b bb b bb b bb b bb b bb b bb b bb b bb b bb b bb b bb b bb b';
-var breakingChange = 'BREAKING CHANGE: ';
+var breakingChange = '破壞性更新：';
 var breaking = 'asdhdfkjhbakjdhjkashd adhfajkhs asdhkjdsh ahshd';
 var longIssuesSplit =
   longIssues.slice(0, defaultOptions.maxLineWidth).trim() +
@@ -55,7 +55,7 @@ describe('commit message', function() {
         type,
         subject
       })
-    ).to.equal(`${type}: ${subject}`);
+    ).to.equal(`${type}：${subject}`);
   });
   it('only header w/ scope', function() {
     expect(
@@ -64,7 +64,7 @@ describe('commit message', function() {
         scope,
         subject
       })
-    ).to.equal(`${type}(${scope}): ${subject}`);
+    ).to.equal(`${type}(${scope})：${subject}`);
   });
   it('header and body w/ out scope', function() {
     expect(
@@ -73,7 +73,7 @@ describe('commit message', function() {
         subject,
         body
       })
-    ).to.equal(`${type}: ${subject}\n\n${body}`);
+    ).to.equal(`${type}：${subject}\n\n${body}`);
   });
   it('header and body w/ scope', function() {
     expect(
@@ -83,7 +83,7 @@ describe('commit message', function() {
         subject,
         body
       })
-    ).to.equal(`${type}(${scope}): ${subject}\n\n${body}`);
+    ).to.equal(`${type}(${scope})：${subject}\n\n${body}`);
   });
   it('header and body w/ uppercase scope', function() {
     var upperCaseScope = scope.toLocaleUpperCase();
@@ -100,7 +100,7 @@ describe('commit message', function() {
           disableScopeLowerCase: true
         }
       )
-    ).to.equal(`${type}(${upperCaseScope}): ${subject}\n\n${body}`);
+    ).to.equal(`${type}(${upperCaseScope})：${subject}\n\n${body}`);
   });
   it('header and body w/ uppercase subject', function() {
     var upperCaseSubject = subject.toLocaleUpperCase();
@@ -117,7 +117,7 @@ describe('commit message', function() {
           disableSubjectLowerCase: true
         }
       )
-    ).to.equal(`${type}(${scope}): ${upperCaseSubject}\n\n${body}`);
+    ).to.equal(`${type}(${scope})：${upperCaseSubject}\n\n${body}`);
   });
   it('header, body and issues w/ out scope', function() {
     expect(
@@ -127,7 +127,7 @@ describe('commit message', function() {
         body,
         issues
       })
-    ).to.equal(`${type}: ${subject}\n\n${body}\n\n${issues}`);
+    ).to.equal(`${type}：${subject}\n\n${body}\n\n${issues}`);
   });
   it('header, body and issues w/ scope', function() {
     expect(
@@ -138,7 +138,7 @@ describe('commit message', function() {
         body,
         issues
       })
-    ).to.equal(`${type}(${scope}): ${subject}\n\n${body}\n\n${issues}`);
+    ).to.equal(`${type}(${scope})：${subject}\n\n${body}\n\n${issues}`);
   });
   it('header, body and long issues w/ out scope', function() {
     expect(
@@ -148,7 +148,7 @@ describe('commit message', function() {
         body,
         issues: longIssues
       })
-    ).to.equal(`${type}: ${subject}\n\n${body}\n\n${longIssuesSplit}`);
+    ).to.equal(`${type}：${subject}\n\n${body}\n\n${longIssuesSplit}`);
   });
   it('header, body and long issues w/ scope', function() {
     expect(
@@ -160,7 +160,7 @@ describe('commit message', function() {
         issues: longIssues
       })
     ).to.equal(
-      `${type}(${scope}): ${subject}\n\n${body}\n\n${longIssuesSplit}`
+      `${type}(${scope})：${subject}\n\n${body}\n\n${longIssuesSplit}`
     );
   });
   it('header and long body w/ out scope', function() {
@@ -170,7 +170,7 @@ describe('commit message', function() {
         subject,
         body: longBody
       })
-    ).to.equal(`${type}: ${subject}\n\n${longBodySplit}`);
+    ).to.equal(`${type}：${subject}\n\n${longBodySplit}`);
   });
   it('header and long body w/ scope', function() {
     expect(
@@ -180,7 +180,7 @@ describe('commit message', function() {
         subject,
         body: longBody
       })
-    ).to.equal(`${type}(${scope}): ${subject}\n\n${longBodySplit}`);
+    ).to.equal(`${type}(${scope})：${subject}\n\n${longBodySplit}`);
   });
   it('header, long body and issues w/ out scope', function() {
     expect(
@@ -190,7 +190,7 @@ describe('commit message', function() {
         body: longBody,
         issues
       })
-    ).to.equal(`${type}: ${subject}\n\n${longBodySplit}\n\n${issues}`);
+    ).to.equal(`${type}：${subject}\n\n${longBodySplit}\n\n${issues}`);
   });
   it('header, long body and issues w/ scope', function() {
     expect(
@@ -202,7 +202,7 @@ describe('commit message', function() {
         issues
       })
     ).to.equal(
-      `${type}(${scope}): ${subject}\n\n${longBodySplit}\n\n${issues}`
+      `${type}(${scope})：${subject}\n\n${longBodySplit}\n\n${issues}`
     );
   });
   it('header, long body and long issues w/ out scope', function() {
@@ -213,7 +213,7 @@ describe('commit message', function() {
         body: longBody,
         issues: longIssues
       })
-    ).to.equal(`${type}: ${subject}\n\n${longBodySplit}\n\n${longIssuesSplit}`);
+    ).to.equal(`${type}：${subject}\n\n${longBodySplit}\n\n${longIssuesSplit}`);
   });
   it('header, long body and long issues w/ scope', function() {
     expect(
@@ -225,36 +225,32 @@ describe('commit message', function() {
         issues: longIssues
       })
     ).to.equal(
-      `${type}(${scope}): ${subject}\n\n${longBodySplit}\n\n${longIssuesSplit}`
+      `${type}(${scope})：${subject}\n\n${longBodySplit}\n\n${longIssuesSplit}`
     );
   });
   it('header, long body, breaking change, and long issues w/ scope', function() {
-    expect(
-      commitMessage({
-        type,
-        scope,
-        subject,
-        body: longBody,
-        breaking,
-        issues: longIssues
-      })
-    ).to.equal(
-      `${type}(${scope}): ${subject}\n\n${longBodySplit}\n\n${breakingChange}${breaking}\n\n${longIssuesSplit}`
-    );
+    const actual = commitMessage({
+      type,
+      scope,
+      subject,
+      body: longBody,
+      breaking,
+      issues: longIssues
+    });
+    const ans = `${type}(${scope})：${subject}\n\n${longBodySplit}\n\n${breakingChange}${breaking}\n\n${longIssuesSplit}`;
+    expect(actual).to.equal(ans);
   });
   it('header, long body, breaking change (with prefix entered), and long issues w/ scope', function() {
-    expect(
-      commitMessage({
-        type,
-        scope,
-        subject,
-        body: longBody,
-        breaking: `${breakingChange}${breaking}`,
-        issues: longIssues
-      })
-    ).to.equal(
-      `${type}(${scope}): ${subject}\n\n${longBodySplit}\n\n${breakingChange}${breaking}\n\n${longIssuesSplit}`
-    );
+    const actual = commitMessage({
+      type,
+      scope,
+      subject,
+      body: longBody,
+      breaking: breaking,
+      issues: longIssues
+    });
+    const ans = `${type}(${scope})：${subject}\n\n${longBodySplit}\n\n${breakingChange}${breaking}\n\n${longIssuesSplit}`;
+    expect(actual).to.equal(ans);
   });
 });
 
@@ -267,8 +263,10 @@ describe('validation', function() {
         subject: longBody
       })
     ).to.throw(
-      'length must be less than or equal to ' +
-        `${defaultOptions.maxLineWidth - type.length - scope.length - 4}`
+      '簡要描述的長度必須小於等於 ' +
+        `${defaultOptions.maxLineWidth - type.length - scope.length - 4}` +
+        ' 字符，目前長度為 ' +
+        `${longBody.length} 字元。`
     );
   });
   it('empty subject', function() {
@@ -278,7 +276,7 @@ describe('validation', function() {
         scope,
         subject: ''
       })
-    ).to.throw('subject is required');
+    ).to.throw('必須填寫簡要描述');
   });
 });
 
@@ -343,15 +341,15 @@ describe('defaults', function() {
 describe('prompts', function() {
   it('commit subject prompt for commit w/ out scope', function() {
     expect(questionPrompt('subject', { type })).to.contain(
-      `(max ${defaultOptions.maxHeaderWidth - type.length - 2} chars)`
+      `（最多 ${defaultOptions.maxHeaderWidth - type.length - 2} 字元）`
     );
   });
   it('commit subject prompt for commit w/ scope', function() {
     expect(questionPrompt('subject', { type, scope })).to.contain(
-      `(max ${defaultOptions.maxHeaderWidth -
+      `（最多 ${defaultOptions.maxHeaderWidth -
         type.length -
         scope.length -
-        4} chars)`
+        4} 字元）`
     );
   });
 });
@@ -447,7 +445,7 @@ describe('commitlint config header-max-length', function() {
 
     it('with no environment or commitizen config override', function() {
       return mockOptions(72).then(function(options) {
-        expect(options).to.have.property('maxHeaderWidth', 72);
+        expect(options).to.have.property('maxHeaderWidth', 100);
       });
     });
 
